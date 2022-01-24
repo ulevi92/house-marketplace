@@ -5,7 +5,7 @@ import { getFirestore } from "firebase/firestore";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyD46J6nYOzqawB1eUFP7cNmwMmWjQdzryk",
   authDomain: "house-marketplace-app-cd88a.firebaseapp.com",
   projectId: "house-marketplace-app-cd88a",
