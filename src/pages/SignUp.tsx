@@ -10,6 +10,7 @@ import {
 import { initializeApp } from "firebase/app";
 import { setDoc, doc, serverTimestamp, FieldValue } from "firebase/firestore";
 import { db, firebaseConfig } from "../firebase.config";
+import { toast } from "react-toastify";
 
 interface FormState {
   name: string;
@@ -68,7 +69,7 @@ const SignUp = () => {
 
       navigate("/");
     } catch (error) {
-      console.log(error);
+      toast.error("Something went wrong with registration");
     }
   };
 

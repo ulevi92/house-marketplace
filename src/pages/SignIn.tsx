@@ -5,6 +5,7 @@ import visibilityIcon from "../assets/svg/visibilityIcon.svg";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../firebase.config";
+import { toast } from "react-toastify";
 
 interface FormState {
   email: string;
@@ -48,7 +49,7 @@ const SignIn = () => {
         navigate("/");
       }
     } catch (error) {
-      console.log(error);
+      toast.error("Bad User Credentials");
     }
   };
 
