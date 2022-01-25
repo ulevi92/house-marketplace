@@ -11,6 +11,7 @@ import { initializeApp } from "firebase/app";
 import { setDoc, doc, serverTimestamp, FieldValue } from "firebase/firestore";
 import { db, firebaseConfig } from "../firebase.config";
 import { toast } from "react-toastify";
+import OAuth from "../components/OAuth";
 
 interface FormState {
   name: string;
@@ -129,6 +130,8 @@ const SignUp = () => {
             </button>
           </div>
         </form>
+
+        <OAuth />
 
         <Link to='/sign-in' className='registerLink'>
           Sign In Instead

@@ -6,6 +6,7 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../firebase.config";
 import { toast } from "react-toastify";
+import OAuth from "../components/OAuth";
 
 interface FormState {
   email: string;
@@ -100,6 +101,8 @@ const SignIn = () => {
             </button>
           </div>
         </form>
+
+        <OAuth />
 
         <Link to='/sign-up' className='registerLink'>
           Sign Up Instead
