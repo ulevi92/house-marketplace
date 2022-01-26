@@ -8,6 +8,7 @@ import {
   limit,
   startAfter,
   getDocs,
+  DocumentData,
   CollectionReference,
 } from "firebase/firestore";
 import { db } from "../firebase.config";
@@ -17,13 +18,13 @@ import ListingItem from "../components/ListingItem";
 import { ListingsData, ListingsDataType } from "../types/FirestoreTypes";
 import { ParamsType } from "../types/ParamsType";
 
-interface OffersState {
+interface CategoryState {
   listings: ListingsData[];
   loading: boolean;
 }
 
-const Offers = () => {
-  const [state, setState] = useState<OffersState>({
+const Category = () => {
+  const [state, setState] = useState<CategoryState>({
     listings: [],
     loading: true,
   });
@@ -46,7 +47,7 @@ const Offers = () => {
         // Create a query
         const q = query(
           listingsRef,
-          where("offer", "==", true),
+          where("type", "==", params.categoryName),
           orderBy("timestamp", "desc"),
           limit(10)
         );
@@ -73,7 +74,7 @@ const Offers = () => {
     return () => {
       mount.current = false;
     };
-  }, []);
+  }, [params.categoryName]);
 
   const onDeleteClick = (id: string, name: string) => {};
 
@@ -91,7 +92,11 @@ const Offers = () => {
   return (
     <div className='category'>
       <header>
-        <p className='pageHeader'>Offers</p>
+        <p className='pageHeader'>
+          {params.categoryName === "rent"
+            ? "Places for rent"
+            : "Places for sale"}
+        </p>
       </header>
 
       {loading ? (
@@ -101,10 +106,10 @@ const Offers = () => {
           <ul className='categoryListings'>{renderListings}</ul>
         </main>
       ) : (
-        <p>There are no current offers</p>
+        <p>No listings for {params.categoryName}</p>
       )}
     </div>
   );
 };
 
-export default Offers;
+export default Category;

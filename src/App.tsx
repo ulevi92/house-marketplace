@@ -10,12 +10,14 @@ import SignUp from "./pages/SignUp";
 
 import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from "./components/PrivateRoute";
+import Category from "./pages/Category";
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path='/' element={<Explore />} />
+        <Route path='/category/:categoryName' element={<Category />} />
         <Route path='/offers' element={<Offers />} />
         <Route path='/profile' element={<PrivateRoute />}>
           <Route path='/profile' element={<Profile />} />
