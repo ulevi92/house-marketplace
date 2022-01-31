@@ -15,8 +15,8 @@ import { db } from "../firebase.config";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
 import ListingItem from "../components/ListingItem";
-import { ListingsData, ListingsDataType } from "../types/FirestoreTypes";
-import { ParamsType } from "../types/ParamsType";
+import { ListingsData, ListingsDataType } from "../types/firestoreTypes";
+import { ParamsType } from "../types/paramsType";
 
 interface CategoryState {
   listings: ListingsData[];
