@@ -1,25 +1,27 @@
 import { type } from "os";
 
+export type FormDataType = {
+  type: string;
+  name: string;
+  bedrooms: number;
+  bathrooms: number;
+  parking: boolean;
+  furnished: boolean;
+  address: string;
+  offer: boolean;
+  regularPrice: number;
+  discountedPrice?: number;
+  images: any;
+  latitude: number;
+  longitude: number;
+  userRef: string;
+  location?: string;
+};
+
 export type ListingStateType = {
   geolocationEnabled: boolean;
   loading: boolean;
-  formData: {
-    type: string;
-    name: string;
-    bedrooms: number;
-    bathrooms: number;
-    parking: boolean;
-    furnished: boolean;
-    address?: string;
-    offer: boolean;
-    regularPrice: number;
-    discountedPrice?: number;
-    images: any;
-    latitude: number;
-    longitude: number;
-    userRef: string;
-    location?: string;
-  };
+  formData: FormDataType;
 };
 
 type GeometryType = {

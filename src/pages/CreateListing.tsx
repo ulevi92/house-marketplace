@@ -265,7 +265,6 @@ const CreateListing = () => {
     };
 
     delete formDataCopy.images;
-    delete formDataCopy.address;
 
     location && (formDataCopy.location = location);
 
