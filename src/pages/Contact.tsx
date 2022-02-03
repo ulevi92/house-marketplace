@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { ParamsType } from "../types/paramsType";
+import { ParamsListType } from "../types/paramsType";
 import { doc, DocumentReference, getDoc } from "firebase/firestore";
 import { db } from "../firebase.config";
 import { ContactType } from "../types/contactType";
@@ -22,7 +22,7 @@ const Contact = () => {
 
   const { message, loading, landlord } = state;
 
-  const params = useParams<ParamsType>();
+  const params = useParams<ParamsListType>();
   const navigate = useNavigate();
 
   useEffect(() => {

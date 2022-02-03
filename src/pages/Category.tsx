@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
 import ListingItem from "../components/ListingItem";
 
-import { ParamsType } from "../types/paramsType";
+import { ParamsListType } from "../types/paramsType";
 import { FormDataType, GetListingType } from "../types/listingType";
 
 interface CategoryState {
@@ -37,7 +37,7 @@ const Category = () => {
 
   const isMount = useRef(true);
 
-  const params = useParams<ParamsType>();
+  const params = useParams<ParamsListType>();
 
   const setLoadButtonShow = (condition: boolean) =>
     setState((prevState) => ({

@@ -6,7 +6,7 @@ import { db } from "../firebase.config";
 import Spinner from "../components/Spinner";
 import shareIcon from "../assets/svg/shareIcon.svg";
 import { FormDataType } from "../types/listingType";
-import { ParamsType } from "../types/paramsType";
+import { ParamsListType } from "../types/paramsType";
 import { toast } from "react-toastify";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
@@ -41,7 +41,7 @@ const Listing = () => {
 
   const auth = getAuth();
   const navigate = useNavigate();
-  const params = useParams<ParamsType>();
+  const params = useParams<ParamsListType>();
 
   useEffect(() => {
     const fetchListing = async () => {

@@ -1,4 +1,4 @@
-export type ParamsType = {
+export type ParamsListType = {
   categoryName: string;
   listingId: string;
   landlordId: string;

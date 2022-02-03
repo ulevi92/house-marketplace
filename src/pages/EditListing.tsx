@@ -24,7 +24,7 @@ import {
   ListingStateType,
 } from "../types/listingType";
 import { initializeApp } from "firebase/app";
-import { ParamsType } from "../types/paramsType";
+import { ParamsListType } from "../types/paramsType";
 
 const apiKey = process.env.REACT_APP_GOOGLE_API;
 
@@ -56,7 +56,7 @@ const EditListing = () => {
 
   const isMounted = useRef(true);
 
-  const params = useParams<ParamsType>();
+  const params = useParams<ParamsListType>();
   const navigate = useNavigate();
   const auth = getAuth();
 
