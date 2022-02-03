@@ -13,11 +13,12 @@ import { db } from "../firebase.config";
 import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
 import ListingItem from "../components/ListingItem";
-import { ListingsData, ListingsDataType } from "../types/firestoreTypes";
+
 import { ParamsType } from "../types/paramsType";
+import { FormDataType, GetListingType } from "../types/listingType";
 
 interface CategoryState {
-  listings: ListingsData[];
+  listings: GetListingType[];
   loading: boolean;
 }
 
@@ -40,7 +41,7 @@ const Category = () => {
         const listingsRef = collection(
           db,
           "listings"
-        ) as CollectionReference<ListingsDataType>;
+        ) as CollectionReference<FormDataType>;
 
         // Create a query
         const q = query(
@@ -53,7 +54,7 @@ const Category = () => {
         // Execute query
         const querySnap = await getDocs(q);
 
-        let listings: ListingsData[] = [];
+        let listings: GetListingType[] = [];
 
         querySnap.forEach((doc) => {
           return listings.push({ id: doc.id, data: doc.data() });
@@ -74,15 +75,8 @@ const Category = () => {
     };
   }, [params.categoryName]);
 
-  const onDeleteClick = (id: string, name: string) => {};
-
   const renderListings = listings.map((listing) => (
-    <ListingItem
-      key={listing.id}
-      listing={listing.data}
-      id={listing.id}
-      onDeleteClick={onDeleteClick}
-    />
+    <ListingItem key={listing.id} listing={listing.data} id={listing.id} />
   ));
 
   return (

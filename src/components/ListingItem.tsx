@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 import { ReactComponent as DeleteIcon } from "../assets/svg/deleteIcon.svg";
 import bedIcon from "../assets/svg/bedIcon.svg";
 import bathtubIcon from "../assets/svg/bathtubIcon.svg";
-import { ListingsDataType } from "../types/firestoreTypes";
+import { FormDataType } from "../types/listingType";
 
 interface ListingItemProps {
-  listing: ListingsDataType;
+  listing: FormDataType;
   id: string;
-  onDeleteClick: (id: string, name: string) => void;
+  onDeleteClick?: (id: string) => Promise<void>;
   onDelete?: boolean;
 }
 
@@ -25,7 +25,7 @@ const ListingItem: FC<ListingItemProps> = ({
         className='categoryListingLink'
       >
         <img
-          src={listing.imageUrls[0]}
+          src={listing.imageUrls![0]}
           alt={listing.name}
           className='categoryListingImg'
         />
@@ -37,7 +37,7 @@ const ListingItem: FC<ListingItemProps> = ({
           <p className='categoryListingPrice'>
             $
             {listing.offer
-              ? listing.discountedPrice.toLocaleString()
+              ? listing.discountedPrice!.toLocaleString()
               : listing.regularPrice.toLocaleString()}{" "}
             {listing.type === "rent" && "/ month"}
           </p>
@@ -64,7 +64,7 @@ const ListingItem: FC<ListingItemProps> = ({
         <DeleteIcon
           className='removeIcon'
           fill='rgb(231,76,60)'
-          onClick={() => onDeleteClick}
+          onClick={() => onDeleteClick!(id)}
         />
       )}
     </li>

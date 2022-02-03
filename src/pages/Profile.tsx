@@ -1,15 +1,30 @@
 import React, { useEffect, useRef, useState } from "react";
 import { getAuth, updateProfile } from "firebase/auth";
-import { doc, updateDoc } from "firebase/firestore";
+import {
+  doc,
+  updateDoc,
+  collection,
+  query,
+  where,
+  orderBy,
+  deleteDoc,
+  CollectionReference,
+  getDocs,
+} from "firebase/firestore";
 import { db } from "../firebase.config";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import arrowRight from "../assets/svg/keyboardArrowRightIcon.svg";
 import homeIcon from "../assets/svg/homeIcon.svg";
+import { FormDataType, GetListingType } from "../types/listingType";
+import Spinner from "../components/Spinner";
+import ListingItem from "../components/ListingItem";
 
 interface ProfileState {
   name: string | null;
   email: string | null;
+  listings?: GetListingType[];
+  loading: boolean;
 }
 
 const Profile = () => {
@@ -19,12 +34,48 @@ const Profile = () => {
 
   const [changeDetails, setChangeDetails] = useState(false);
 
-  const [formData, setFormData] = useState<ProfileState>({
+  const [state, setState] = useState<ProfileState>({
     name: auth.currentUser!.displayName,
     email: auth.currentUser!.email,
+    loading: true,
   });
 
-  const { name, email } = formData;
+  const { loading, listings } = state;
+
+  useEffect(() => {
+    const fetchUserListings = async () => {
+      const listingRef = collection(
+        db,
+        "listings"
+      ) as CollectionReference<FormDataType>;
+
+      const q = query(
+        listingRef,
+        where("userRef", "==", auth.currentUser?.uid),
+        orderBy("timestamp", "desc")
+      );
+      const querySnap = await getDocs(q);
+
+      const listings: GetListingType[] = [];
+
+      querySnap.forEach((doc) =>
+        listings.push({
+          id: doc.id,
+          data: doc.data(),
+        })
+      );
+
+      setState((prevState) => ({
+        ...prevState,
+        listings,
+        loading: false,
+      }));
+    };
+
+    fetchUserListings();
+  }, [auth.currentUser?.uid]);
+
+  const { name, email } = state;
 
   const onLogOutClick = () => {
     auth.signOut();
@@ -54,11 +105,41 @@ const Profile = () => {
   };
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prevState) => ({
+    setState((prevState) => ({
       ...prevState,
       [e.target.id]: e.target.value,
     }));
   };
+
+  const onDelete = async (id: string) => {
+    if (window.confirm("Are you sure you want to delete?")) {
+      setState((prevState) => ({
+        ...prevState,
+        loading: true,
+      }));
+      await deleteDoc(doc(db, "listings", id));
+      const updatedListings = listings?.filter((listing) => listing.id !== id);
+
+      setState((prevState) => ({
+        ...prevState,
+        listings: updatedListings,
+        loading: false,
+      }));
+      toast.success("successfuly deleted listing");
+    }
+  };
+
+  const renderListings = listings?.map(({ data, id }) => (
+    <ListingItem
+      key={id}
+      listing={data}
+      id={id}
+      onDelete
+      onDeleteClick={onDelete}
+    />
+  ));
+
+  if (loading) return <Spinner />;
 
   return (
     <div className='profile'>
@@ -104,6 +185,14 @@ const Profile = () => {
           <p>Sell or rent your home</p>
           <img src={arrowRight} alt='arrow right' />
         </Link>
+
+        {listings!.length > 0 && (
+          <>
+            <p className='listingText'>Your Listings</p>
+
+            <ul className='listingList'>{renderListings}</ul>
+          </>
+        )}
       </main>
     </div>
   );
