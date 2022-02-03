@@ -6,9 +6,7 @@ import {
   where,
   orderBy,
   limit,
-  startAfter,
   getDocs,
-  DocumentData,
   CollectionReference,
 } from "firebase/firestore";
 import { db } from "../firebase.config";
@@ -86,8 +84,6 @@ const Category = () => {
       onDeleteClick={onDeleteClick}
     />
   ));
-
-  console.log(listings);
 
   return (
     <div className='category'>

@@ -18,8 +18,6 @@ const ListingItem: FC<ListingItemProps> = ({
   onDeleteClick,
   onDelete,
 }) => {
-  console.log(listing.imageUrls[0]);
-
   return (
     <li className='categoryListing'>
       <Link

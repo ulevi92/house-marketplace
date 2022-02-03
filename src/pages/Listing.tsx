@@ -84,8 +84,6 @@ const Listing = () => {
   };
 
   const renderImages = listing?.imageUrls!.map((url, index) => {
-    console.log(index);
-
     return (
       <SwiperSlide key={index}>
         <div className='swiperSlideDiv'>

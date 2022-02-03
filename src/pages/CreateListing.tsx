@@ -188,10 +188,6 @@ const CreateListing = () => {
       geolocation.lng = data.results[0].geometry.location.lng ?? 0;
 
       location = data.status === "ZERO_RESUILTS" ? undefined : address;
-
-      console.log(data);
-
-      setLoading(false);
     }
     if (!geolocationEnabled) {
       geolocation.lat = latitude;
@@ -241,8 +237,6 @@ const CreateListing = () => {
             // Handle successful uploads on complete
             // For instance, get the download URL: https://firebasestorage.googleapis.com/...
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              console.log(downloadURL);
-
               resolve(downloadURL);
             });
           }
@@ -264,6 +258,8 @@ const CreateListing = () => {
       geolocation,
       timestamp: serverTimestamp(),
     };
+
+    console.log(imageUrls);
 
     delete formDataCopy.images;
 

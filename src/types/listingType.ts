@@ -1,3 +1,8 @@
+export type GetListingType = {
+  id: string;
+  data: FormDataType;
+};
+
 export type FormDataType = {
   type: string;
   name: string;
