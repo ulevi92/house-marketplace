@@ -18,7 +18,7 @@ const Contact = () => {
     message: "",
     loading: true,
   });
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const { message, loading, landlord } = state;
 

@@ -36,7 +36,7 @@ function App() {
           element={<Listing />}
         />
         <Route path='/contact/:landlordId' element={<Contact />} />
-        <Route path='/edit-listing' element={<EditListing />} />
+        <Route path='/edit-listing/:listingId' element={<EditListing />} />
         <Route path='/*' element={<NotFound />} />
       </Routes>
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import {
   collection,
@@ -35,6 +35,8 @@ const Category = () => {
 
   const { listings, loading, lastFetchedListing, loadButtonShow } = state;
 
+  const isMount = useRef(true);
+
   const params = useParams<ParamsType>();
 
   const setLoadButtonShow = (condition: boolean) =>
@@ -67,9 +69,9 @@ const Category = () => {
 
         let listings: GetListingType[] = [];
 
-        querySnap.forEach((doc) => {
-          return listings.push({ id: doc.id, data: doc.data() });
-        });
+        querySnap.forEach((doc) =>
+          listings.push({ id: doc.id, data: doc.data() })
+        );
 
         if (querySnap.docs.length < 5) setLoadButtonShow(false);
 
@@ -84,7 +86,13 @@ const Category = () => {
       }
     };
 
-    fetchListings();
+    if (isMount.current) {
+      fetchListings();
+    }
+
+    return () => {
+      isMount.current = false;
+    };
   }, [params.categoryName]);
 
   // Pagination / load more

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   collection,
-  doc,
   getDocs,
   query,
   orderBy,
@@ -72,7 +71,12 @@ const Slider = () => {
       onClick={() => navigate(`/category/${data.type}/${id}`)}
     >
       <div className='swiperSlideDiv'>
-        <img src={data.imageUrls![0]} alt='' className='swiperSlideImg' />
+        <img
+          src={data.imageUrls![0]}
+          alt=''
+          className='swiperSlideImg'
+          onContextMenu={() => false}
+        />
         <p className='swiperSlideText'>{data.name}</p>
         <p className='swiperSlidePrice'>
           $ {data.discountedPrice ?? data.regularPrice}{" "}
@@ -83,6 +87,8 @@ const Slider = () => {
   ));
 
   if (loading) return <Spinner />;
+
+  if (listings?.length === 0) return <></>;
 
   return (
     <>

@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
 import { ReactComponent as DeleteIcon } from "../assets/svg/deleteIcon.svg";
+import { ReactComponent as EditIcon } from "../assets/svg/editIcon.svg";
 import bedIcon from "../assets/svg/bedIcon.svg";
 import bathtubIcon from "../assets/svg/bathtubIcon.svg";
 import { FormDataType } from "../types/listingType";
@@ -10,6 +11,8 @@ interface ListingItemProps {
   id: string;
   onDeleteClick?: (id: string) => Promise<void>;
   onDelete?: boolean;
+  onEdit?: boolean;
+  onEditClick?: (id: string) => void;
 }
 
 const ListingItem: FC<ListingItemProps> = ({
@@ -17,6 +20,8 @@ const ListingItem: FC<ListingItemProps> = ({
   id,
   onDeleteClick,
   onDelete,
+  onEdit,
+  onEditClick,
 }) => {
   return (
     <li className='categoryListing'>
@@ -66,6 +71,10 @@ const ListingItem: FC<ListingItemProps> = ({
           fill='rgb(231,76,60)'
           onClick={() => onDeleteClick!(id)}
         />
+      )}
+
+      {onEdit && (
+        <EditIcon className='editIcon' onClick={() => onEditClick!(id)} />
       )}
     </li>
   );

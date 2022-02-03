@@ -5,7 +5,7 @@ import { getAuth } from "firebase/auth";
 import { db } from "../firebase.config";
 import Spinner from "../components/Spinner";
 import shareIcon from "../assets/svg/shareIcon.svg";
-import { FormDataType, ListingStateType } from "../types/listingType";
+import { FormDataType } from "../types/listingType";
 import { ParamsType } from "../types/paramsType";
 import { toast } from "react-toastify";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
@@ -39,13 +39,6 @@ const Listing = () => {
     }));
   };
 
-  const setLoading = (condition: boolean) => {
-    setState((prevState) => ({
-      ...prevState,
-      loading: condition,
-    }));
-  };
-
   const auth = getAuth();
   const navigate = useNavigate();
   const params = useParams<ParamsType>();
@@ -68,6 +61,7 @@ const Listing = () => {
       }
 
       if (!docSnap.exists()) {
+        toast.error(`The Listing you're trying to get to is not exists`);
         navigate("/");
       }
     };

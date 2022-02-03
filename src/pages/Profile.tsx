@@ -29,7 +29,7 @@ interface ProfileState {
 
 const Profile = () => {
   const auth = getAuth();
-
+  const isMounted = useRef(true);
   const navigate = useNavigate();
 
   const [changeDetails, setChangeDetails] = useState(false);
@@ -72,7 +72,11 @@ const Profile = () => {
       }));
     };
 
-    fetchUserListings();
+    if (isMounted.current) fetchUserListings();
+
+    return () => {
+      isMounted.current = false;
+    };
   }, [auth.currentUser?.uid]);
 
   const { name, email } = state;
@@ -129,6 +133,8 @@ const Profile = () => {
     }
   };
 
+  const onEdit = (id: string) => navigate(`/edit-listing/${id}`);
+
   const renderListings = listings?.map(({ data, id }) => (
     <ListingItem
       key={id}
@@ -136,6 +142,8 @@ const Profile = () => {
       id={id}
       onDelete
       onDeleteClick={onDelete}
+      onEdit
+      onEditClick={onEdit}
     />
   ));
 

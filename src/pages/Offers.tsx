@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
 import {
   collection,
   query,
@@ -16,7 +15,6 @@ import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
 import ListingItem from "../components/ListingItem";
 
-import { ParamsType } from "../types/paramsType";
 import { FormDataType, GetListingType } from "../types/listingType";
 
 interface OffersState {
@@ -35,7 +33,7 @@ const Offers = () => {
 
   const { listings, loading, loadButtonShow, lastFetchedListing } = state;
 
-  const mount = useRef(true);
+  const isMount = useRef(true);
 
   useEffect(() => {
     const fetchListings = async () => {
@@ -75,8 +73,11 @@ const Offers = () => {
         toast.error("Something Went Wront");
       }
     };
+    if (isMount.current) fetchListings();
 
-    fetchListings();
+    return () => {
+      isMount.current = false;
+    };
   }, []);
 
   // Pagination / load more
