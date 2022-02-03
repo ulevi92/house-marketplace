@@ -16,7 +16,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import { FormDataType, GetListingType } from "../types/listingType";
+import { FormDataType, GetListingType } from "./types/listingType";
 import { initializeApp } from "firebase/app";
 import Spinner from "./Spinner";
 

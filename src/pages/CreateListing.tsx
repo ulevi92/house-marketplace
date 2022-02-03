@@ -12,7 +12,7 @@ import { db, firebaseConfig } from "../firebase.config";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
 import Spinner from "../components/Spinner";
-import { GetGeolocationDataType, ListingStateType } from "../types/listingType";
+import { GetGeolocationDataType, ListingStateType } from "../components/types/listingType";
 import { initializeApp } from "firebase/app";
 
 const apiKey = process.env.REACT_APP_GOOGLE_API;

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { ParamsListType } from "../types/paramsType";
+import { ParamsListType } from "../components/types/paramsType";
 import { doc, DocumentReference, getDoc } from "firebase/firestore";
 import { db } from "../firebase.config";
-import { ContactType } from "../types/contactType";
+import { ContactType } from "../components/types/contactType";
 import Spinner from "../components/Spinner";
 import { toast } from "react-toastify";
 

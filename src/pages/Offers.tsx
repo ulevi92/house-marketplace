@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
 import ListingItem from "../components/ListingItem";
 
-import { FormDataType, GetListingType } from "../types/listingType";
+import { FormDataType, GetListingType } from "../components/types/listingType";
 
 interface OffersState {
   listings: GetListingType[];

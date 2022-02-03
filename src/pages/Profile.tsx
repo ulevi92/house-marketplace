@@ -16,7 +16,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import arrowRight from "../assets/svg/keyboardArrowRightIcon.svg";
 import homeIcon from "../assets/svg/homeIcon.svg";
-import { FormDataType, GetListingType } from "../types/listingType";
+import { FormDataType, GetListingType } from "../components/types/listingType";
 import Spinner from "../components/Spinner";
 import ListingItem from "../components/ListingItem";
 

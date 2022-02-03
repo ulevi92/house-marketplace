@@ -5,8 +5,8 @@ import { getAuth } from "firebase/auth";
 import { db } from "../firebase.config";
 import Spinner from "../components/Spinner";
 import shareIcon from "../assets/svg/shareIcon.svg";
-import { FormDataType } from "../types/listingType";
-import { ParamsListType } from "../types/paramsType";
+import { FormDataType } from "../components/types/listingType";
+import { ParamsListType } from "../components/types/paramsType";
 import { toast } from "react-toastify";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 

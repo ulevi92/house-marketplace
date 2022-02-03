@@ -16,8 +16,8 @@ import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
 import ListingItem from "../components/ListingItem";
 
-import { ParamsListType } from "../types/paramsType";
-import { FormDataType, GetListingType } from "../types/listingType";
+import { ParamsListType } from "../components/types/paramsType";
+import { FormDataType, GetListingType } from "../components/types/listingType";
 
 interface CategoryState {
   listings: GetListingType[];

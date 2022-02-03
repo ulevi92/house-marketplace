@@ -22,9 +22,9 @@ import {
   FormDataType,
   GetGeolocationDataType,
   ListingStateType,
-} from "../types/listingType";
+} from "../components/types/listingType";
 import { initializeApp } from "firebase/app";
-import { ParamsListType } from "../types/paramsType";
+import { ParamsListType } from "../components/types/paramsType";
 
 const apiKey = process.env.REACT_APP_GOOGLE_API;
 
