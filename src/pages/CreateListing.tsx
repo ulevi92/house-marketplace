@@ -186,9 +186,10 @@ const CreateListing = () => {
 
       geolocation.lat = data.results[0].geometry.location.lat ?? 0;
       geolocation.lng = data.results[0].geometry.location.lng ?? 0;
-      location = address;
 
       location = data.status === "ZERO_RESUILTS" ? undefined : address;
+
+      console.log(data);
 
       setLoading(false);
     }

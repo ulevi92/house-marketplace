@@ -8,6 +8,14 @@ import shareIcon from "../assets/svg/shareIcon.svg";
 import { FormDataType, ListingStateType } from "../types/listingType";
 import { ParamsType } from "../types/paramsType";
 import { toast } from "react-toastify";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+
+import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
 
 interface ListingState {
   loading: boolean;
@@ -75,8 +83,31 @@ const Listing = () => {
     setTimeout(() => setShareLinkCopied(false), 2000);
   };
 
+  const renderImages = listing?.imageUrls!.map((url, index) => {
+    console.log(index);
+
+    return (
+      <SwiperSlide key={index}>
+        <div className='swiperSlideDiv'>
+          <img src={url} alt='' className='swiperSlideImg' />
+          <p className='swiperSlideText'>Image {index + 1}</p>
+        </div>
+      </SwiperSlide>
+    );
+  });
+
   return (
     <main>
+      <Swiper
+        modules={[Navigation, Pagination, Scrollbar, A11y]}
+        navigation
+        pagination={{ clickable: true }}
+        scrollbar={{ draggable: true }}
+        slidesPerView={1}
+      >
+        {renderImages}
+      </Swiper>
+
       <div className='shareIconDiv' onClick={onCopyClick}>
         <img src={shareIcon} alt='share' />
       </div>
@@ -118,6 +149,23 @@ const Listing = () => {
         </ul>
 
         <p className='listingLocationTitle'>{listing?.location}</p>
+
+        <div className='leafletContainer'>
+          <MapContainer
+            style={{ height: "100%", width: "100%" }}
+            center={[listing?.geolocation!.lat, listing?.geolocation!.lng]}
+            zoom={13}
+            scrollWheelZoom={false}
+          >
+            <TileLayer url='https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png' />
+
+            <Marker
+              position={[listing?.geolocation!.lat, listing?.geolocation!.lng]}
+            >
+              <Popup>{listing?.location}</Popup>
+            </Marker>
+          </MapContainer>
+        </div>
 
         {auth.currentUser?.uid !== listing?.userRef && (
           <Link

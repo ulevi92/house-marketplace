@@ -1,5 +1,3 @@
-import { type } from "os";
-
 export type FormDataType = {
   type: string;
   name: string;
@@ -16,6 +14,11 @@ export type FormDataType = {
   longitude: number;
   userRef: string;
   location?: string;
+  geolocation?: {
+    lat: number;
+    lng: number;
+  };
+  imageUrls?: string[];
 };
 
 export type ListingStateType = {
