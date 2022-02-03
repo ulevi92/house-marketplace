@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {
   collection,
@@ -8,6 +8,8 @@ import {
   limit,
   getDocs,
   CollectionReference,
+  QueryDocumentSnapshot,
+  startAfter,
 } from "firebase/firestore";
 import { db } from "../firebase.config";
 import { toast } from "react-toastify";
@@ -20,19 +22,26 @@ import { FormDataType, GetListingType } from "../types/listingType";
 interface CategoryState {
   listings: GetListingType[];
   loading: boolean;
+  lastFetchedListing?: QueryDocumentSnapshot<FormDataType>;
+  loadButtonShow: boolean;
 }
 
 const Category = () => {
   const [state, setState] = useState<CategoryState>({
     listings: [],
     loading: true,
+    loadButtonShow: true,
   });
 
-  const { listings, loading } = state;
+  const { listings, loading, lastFetchedListing, loadButtonShow } = state;
 
   const params = useParams<ParamsType>();
 
-  const mount = useRef(true);
+  const setLoadButtonShow = (condition: boolean) =>
+    setState((prevState) => ({
+      ...prevState,
+      loadButtonShow: condition,
+    }));
 
   useEffect(() => {
     const fetchListings = async () => {
@@ -48,11 +57,13 @@ const Category = () => {
           listingsRef,
           where("type", "==", params.categoryName),
           orderBy("timestamp", "desc"),
-          limit(10)
+          limit(5)
         );
 
         // Execute query
         const querySnap = await getDocs(q);
+
+        const lastVisible = querySnap.docs[querySnap.docs.length - 1];
 
         let listings: GetListingType[] = [];
 
@@ -60,20 +71,61 @@ const Category = () => {
           return listings.push({ id: doc.id, data: doc.data() });
         });
 
-        setState((prevState) => ({ ...prevState, listings, loading: false }));
+        if (querySnap.docs.length < 5) setLoadButtonShow(false);
+
+        setState((prevState) => ({
+          ...prevState,
+          listings,
+          loading: false,
+          lastFetchedListing: lastVisible,
+        }));
       } catch (error) {
         toast.error("Something Went Wront");
       }
     };
 
-    if (mount.current) {
-      fetchListings();
-    }
-
-    return () => {
-      mount.current = false;
-    };
+    fetchListings();
   }, [params.categoryName]);
+
+  // Pagination / load more
+  const onFetchMoreListings = async () => {
+    try {
+      // Get reference
+      const listingsRef = collection(
+        db,
+        "listings"
+      ) as CollectionReference<FormDataType>;
+
+      // Create a query
+      const q = query(
+        listingsRef,
+        where("type", "==", params.categoryName),
+        orderBy("timestamp", "desc"),
+        startAfter(lastFetchedListing),
+        limit(10)
+      );
+
+      // Execute query
+      const querySnap = await getDocs(q);
+
+      const lastVisible = querySnap.docs[querySnap.docs.length - 1];
+
+      let listings: GetListingType[] = [];
+
+      querySnap.forEach((doc) => {
+        return listings.push({ id: doc.id, data: doc.data() });
+      });
+
+      setState((prevState) => ({
+        ...prevState,
+        listings: [...state.listings, ...listings],
+        loading: false,
+        lastFetchedListing: lastVisible,
+      }));
+    } catch (error) {
+      toast.error("Something Went Wront");
+    }
+  };
 
   const renderListings = listings.map((listing) => (
     <ListingItem key={listing.id} listing={listing.data} id={listing.id} />
@@ -92,9 +144,20 @@ const Category = () => {
       {loading ? (
         <Spinner />
       ) : listings && listings.length > 0 ? (
-        <main>
-          <ul className='categoryListings'>{renderListings}</ul>
-        </main>
+        <>
+          <main>
+            <ul className='categoryListings'>{renderListings}</ul>
+          </main>
+
+          <br />
+          <br />
+
+          {loadButtonShow && lastFetchedListing! && (
+            <p className='loadMore' onClick={onFetchMoreListings}>
+              Load More
+            </p>
+          )}
+        </>
       ) : (
         <p>No listings for {params.categoryName}</p>
       )}

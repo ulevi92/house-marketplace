@@ -8,6 +8,8 @@ import {
   limit,
   getDocs,
   CollectionReference,
+  QueryDocumentSnapshot,
+  startAfter,
 } from "firebase/firestore";
 import { db } from "../firebase.config";
 import { toast } from "react-toastify";
@@ -20,17 +22,18 @@ import { FormDataType, GetListingType } from "../types/listingType";
 interface OffersState {
   listings: GetListingType[];
   loading: boolean;
+  lastFetchedListing?: QueryDocumentSnapshot<FormDataType>;
+  loadButtonShow: boolean;
 }
 
 const Offers = () => {
   const [state, setState] = useState<OffersState>({
     listings: [],
     loading: true,
+    loadButtonShow: true,
   });
 
-  const { listings, loading } = state;
-
-  const params = useParams<ParamsType>();
+  const { listings, loading, loadButtonShow, lastFetchedListing } = state;
 
   const mount = useRef(true);
 
@@ -54,26 +57,67 @@ const Offers = () => {
         // Execute query
         const querySnap = await getDocs(q);
 
+        const lastVisible = querySnap.docs[querySnap.docs.length - 1];
+
         let listings: GetListingType[] = [];
 
         querySnap.forEach((doc) => {
           return listings.push({ id: doc.id, data: doc.data() });
         });
 
-        setState((prevState) => ({ ...prevState, listings, loading: false }));
+        setState((prevState) => ({
+          ...prevState,
+          listings,
+          loading: false,
+          lastFetchedListing: lastVisible,
+        }));
       } catch (error) {
         toast.error("Something Went Wront");
       }
     };
 
-    if (mount.current) {
-      fetchListings();
-    }
-
-    return () => {
-      mount.current = false;
-    };
+    fetchListings();
   }, []);
+
+  // Pagination / load more
+  const onFetchMoreListings = async () => {
+    try {
+      // Get reference
+      const listingsRef = collection(
+        db,
+        "listings"
+      ) as CollectionReference<FormDataType>;
+
+      // Create a query
+      const q = query(
+        listingsRef,
+        where("offer", "==", true),
+        orderBy("timestamp", "desc"),
+        startAfter(lastFetchedListing),
+        limit(10)
+      );
+
+      // Execute query
+      const querySnap = await getDocs(q);
+
+      const lastVisible = querySnap.docs[querySnap.docs.length - 1];
+
+      let listings: GetListingType[] = [];
+
+      querySnap.forEach((doc) => {
+        return listings.push({ id: doc.id, data: doc.data() });
+      });
+
+      setState((prevState) => ({
+        ...prevState,
+        listings: [...state.listings, ...listings],
+        loading: false,
+        lastFetchedListing: lastVisible,
+      }));
+    } catch (error) {
+      toast.error("Something Went Wront");
+    }
+  };
 
   const renderListings = listings.map((listing) => (
     <ListingItem key={listing.id} listing={listing.data} id={listing.id} />
@@ -88,9 +132,20 @@ const Offers = () => {
       {loading ? (
         <Spinner />
       ) : listings && listings.length > 0 ? (
-        <main>
-          <ul className='categoryListings'>{renderListings}</ul>
-        </main>
+        <>
+          <main>
+            <ul className='categoryListings'>{renderListings}</ul>
+          </main>
+
+          <br />
+          <br />
+
+          {loadButtonShow && lastFetchedListing! && (
+            <p className='loadMore' onClick={onFetchMoreListings}>
+              Load More
+            </p>
+          )}
+        </>
       ) : (
         <p>There are no current offers</p>
       )}
